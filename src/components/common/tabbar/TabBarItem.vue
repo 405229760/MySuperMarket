@@ -1,5 +1,5 @@
 <template>
-	<div class="tab-bar-item" @click="itemClick" :style="'color:' + itemColor + ';background:' + itemBg">
+	<div class="tab-bar-item" @click="itemClick" :style="itemStyle">
 		<slot name="icon"></slot>
 		<slot name="text"></slot>
 	</div>
@@ -10,21 +10,25 @@
 		name: 'TabBarItem',
 		props: {
 			path: String,
-			activeColor: {
-				type: String,
-				default: 'red'
+			activeStyle: {
+				type: Object,
+				default () {
+					return {
+						color: 'red',
+						background: 'lightgray',
+						fontWeight: 'bold'
+					}
+				}
 			},
-			normalColor: {
-				type: String,
-				default: 'black'
-			},
-			activeBg: {
-				type: String,
-				default: 'lightgray'
-			},
-			normalBg: {
-				type: String,
-				default: 'white'
+			normalStyle: {
+				type: Object,
+				default () {
+					return {
+						color: 'black',
+						background: 'white',
+						fontWeight: 'normal'
+					}
+				}
 			}
 		},
 		computed: {
@@ -32,13 +36,8 @@
 				// 判断当前激活路由路径是否包含该组件的路径
 				return this.$route.path.indexOf(this.path) != -1
 			},
-			itemColor() {
-				// 计算字体颜色
-				return this.itemActive ? this.activeColor : this.normalColor
-			},
-			itemBg() {
-				// 计算背景颜色
-				return this.itemActive ? this.activeBg : this.normalBg
+			itemStyle() {
+				return this.itemActive ? this.activeStyle : this.normalStyle;
 			}
 		},
 		methods: {
@@ -57,6 +56,6 @@
 		flex: 1;
 		height: 100%;
 		text-align: center;
-		padding: 7px;
+		padding: 4px;
 	}
 </style>
