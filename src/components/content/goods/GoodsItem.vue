@@ -4,10 +4,10 @@
 		<div class="goods-info">
 			<p>{{goodsitem.title}}</p>
 			<div class="sometext">
-				<span class="price">{{goodsitem.price}}</span>
+				<span class="price">￥{{goodsitem.price}}</span>
 				<div class="cfav-item">
+					<span>{{goodsitem.cfav}}</span>
 					<span class="iconfont icon-favorites-fill"></span>
-					<span class="cfav">{{goodsitem.cfav}}</span>
 				</div>
 
 			</div>
@@ -48,11 +48,17 @@
 
 			.sometext {
 				display: flex;
-				justify-content: space-evenly;
 				line-height: 20px;
+
 				.price {
 					color: var(--color-tint);
 					font-weight: bold;
+					flex: 1;
+					margin-left: 8px;
+				}
+
+				.cfav-item {
+					margin-right: 8px;
 				}
 			}
 		}

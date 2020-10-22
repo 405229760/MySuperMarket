@@ -25,6 +25,7 @@
 		methods: {
 			tabControlItemClick(index) {
 				this.currentIndex = index
+				this.$emit('tabControlClick', index)
 			}
 		}
 	}
