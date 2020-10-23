@@ -39,25 +39,32 @@
 			})
 
 			// 监听滚动位置
-			this.myScroll.on('scroll', (position) => {
-				// console.log(position)
-				this.$emit('scrollPosition', position)
-			})
-
+			if (this.probeType == 1 || this.probeType == 2 || this.probeType == 3) {
+				this.myScroll.on('scroll', (position) => {
+					// console.log(position)
+					this.$emit('scrollPosition', position)
+				})
+			}
 			// 监听上拉事件
-			this.myScroll.on('pullingUp', () => {
-				this.$emit('scrollPullUp')
-			})
-
+			if (this.pullUpLoad) {
+				this.myScroll.on('pullingUp', () => {
+					this.$emit('scrollPullUp')
+				})
+			}
 		},
 		methods: {
 			// x,y滚动位置，time滚动时间毫秒
 			myScrollTo(x, y, time = 500) {
-				this.myScroll.scrollTo(x, y, time)
+				//这里判断myScroll是否初始化完成了
+				this.myScroll && this.myScroll.scrollTo(x, y, time)
+			},
+			myScrollFinishPullUp() {
+				this.myScroll && this.myScroll.finishPullUp()
 			},
 			// 刷新scroll
 			myScrollRefresh() {
-				this.myScroll.refresh()
+				this.myScroll && this.myScroll.refresh()
+				console.log('刷新scroll')
 			}
 		}
 	}

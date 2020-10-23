@@ -3,12 +3,14 @@
 		<nav-bar class="home-nav">
 			<div slot='center'>购物街</div>
 		</nav-bar>
+		<tab-control :tablist="['流行','新款','精选']" class="home-tab-control" ref='hometabcontrol1' @tabControlClick='tabControlClick'
+		 v-show="isShowFakeTabControl" />
 		<scroll class="homeScroll" ref='homeScroll' @scrollPosition='scrollPosition' @scrollPullUp='scrollPullUp' :probe-type='3'
 		 :pull-up-load='true'>
-			<swiper :key="banners.length" :banners='banners' />
-			<recommend-view :recommends="recommends" />
-			<feature-view class="feature" />
-			<tab-control :tablist="['流行','新款','精选']" class="home-tab-control" @tabControlClick='tabControlClick' />
+			<swiper :key="banners.length" :banners='banners' @swiperImgCompleted='imgCompleted' />
+			<recommend-view :recommends="recommends" @recommendImgCompleted='imgCompleted' />
+			<feature-view class="feature" @featureImgCompleted='imgCompleted' />
+			<tab-control :tablist="['流行','新款','精选']" ref='hometabcontrol0' @tabControlClick='tabControlClick' />
 			<goods-list :goodslist="showGoodsType" />
 		</scroll>
 		<!-- 组件增加原生监听需要.native -->
@@ -21,6 +23,9 @@
 		getHomeBannersData,
 		getHomeGoodsData
 	} from '@/network/home'
+	import {
+		debounce
+	} from '@/tools/jsTools.js'
 	import NavBar from '@/components/common/navbar/NavBar.vue'
 	import Swiper from '@/components/common/swiper/Swiper.vue'
 	import TabControl from '@/components/common/tabcontrol/TabControl.vue'
@@ -41,6 +46,8 @@
 				goodsType: ['pop', 'new', 'sell'],
 				currentType: 0,
 				isShowBackTop: false,
+				isShowFakeTabControl: false,
+				tabControlOffsetTop: 0,
 				goods: {
 					'pop': {
 						page: 0,
@@ -77,10 +84,11 @@
 			this.getHomeGoods(2);
 		},
 		mounted() {
+			const refresh = debounce(this.$refs.homeScroll.myScrollRefresh, 100);
 			// 监听goodsItem中的图片是否加载完成
 			this.$bus.$on('goodsItemImgCompleted', () => {
-				console.log("刷新scroll")
-				this.$refs.homeScroll.myScrollRefresh()
+				// this.$refs.homeScroll && refresh();
+				refresh()
 			})
 		},
 		computed: {
@@ -93,18 +101,28 @@
 				其他
 			*/
 			tabControlClick(index) {
-				this.currentType = index
+				this.currentType = index;
+				this.$refs.hometabcontrol0.setActive(index);
+				this.$refs.hometabcontrol1.setActive(index);
 			},
 			backTopClick() {
 				this.$refs.homeScroll.myScrollTo(0, 0)
 			},
 			scrollPosition(positon) {
+				// 是否显示backTop
 				this.isShowBackTop = (-positon.y) > 1000
+				// 是否显示假tabControl
+				this.isShowFakeTabControl = (-positon.y) >= this.tabControlOffsetTop
 			},
 			scrollPullUp() {
 				console.log('上拉加载更多')
 				this.getHomeGoods(this.currentType)
-				this.$refs.homeScroll.myScroll.finishPullUp()
+				this.$refs.homeScroll.myScrollFinishPullUp()
+			},
+			imgCompleted() {
+				// 获取tabControl距离父组件顶端的距离
+				this.tabControlOffsetTop = this.$refs.hometabcontrol0.$el.offsetTop;
+				// console.log(this.tabControlOffsetTop);
 			},
 			/* 
 				网络请求相关
@@ -142,19 +160,20 @@
 			z-index: 10;
 		}
 
+		.home-tab-control {
+			position: relative;
+			left: 0;
+			right: 0;
+			top: 44px;
+			z-index: 9;
+		}
+
 		.homeScroll {
 			position: absolute;
 			left: 0;
 			right: 0;
 			top: 44px;
 			bottom: 50px;
-
-			.home-tab-control {
-				// 粘性定位
-				position: sticky;
-				top: 44px;
-				z-index: 9;
-			}
 		}
 	}
 </style>

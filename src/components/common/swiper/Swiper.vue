@@ -2,7 +2,7 @@
 	<div class="swiper-container myswiper">
 		<div class="swiper-wrapper">
 			<div class="swiper-slide" v-for="item in banners">
-				<img :src="item.image" alt="">
+				<img :src="item.image" @load='swiperImgLoad'>
 			</div>
 		</div>
 		<!-- 如果需要分页器 -->
@@ -21,6 +21,11 @@
 	import Swiper from 'swiper';
 	export default {
 		name: 'Swiper',
+		data() {
+			return {
+				isload: false
+			}
+		},
 		props: {
 			banners: {
 				type: Array,
@@ -57,6 +62,14 @@
 				//   el: '.swiper-scrollbar',
 				// },
 			})
+		},
+		methods: {
+			swiperImgLoad() {
+				if (!this.isload) {
+					this.$emit('swiperImgCompleted')
+					this.isload = true;
+				}
+			}
 		}
 	}
 </script>
