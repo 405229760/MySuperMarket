@@ -25,10 +25,10 @@
 				myScroll: null
 			}
 		},
-		updated() {
-			this.myScroll.refresh()
-			console.log("scroll refresh")
-		},
+		// updated() {
+		// 	this.myScroll.refresh()
+		// 	console.log("scroll refresh")
+		// },
 		mounted() {
 			// 创建BScroll对象
 			this.myScroll = new BScroll(this.$refs.wrapper, {
@@ -45,7 +45,7 @@
 			})
 
 			// 监听上拉事件
-			this.myScroll.on('pullingUp',()=>{
+			this.myScroll.on('pullingUp', () => {
 				this.$emit('scrollPullUp')
 			})
 
@@ -54,6 +54,10 @@
 			// x,y滚动位置，time滚动时间毫秒
 			myScrollTo(x, y, time = 500) {
 				this.myScroll.scrollTo(x, y, time)
+			},
+			// 刷新scroll
+			myScrollRefresh() {
+				this.myScroll.refresh()
 			}
 		}
 	}

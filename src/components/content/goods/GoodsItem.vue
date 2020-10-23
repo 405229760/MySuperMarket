@@ -1,6 +1,7 @@
 <template>
 	<div class="goodsitem">
-		<img :src="goodsitem.show.img">
+		<!-- 监听图片是否加载完成 -->
+		<img :src="goodsitem.show.img" @load='goodsItemImgLoad'>
 		<div class="goods-info">
 			<p>{{goodsitem.title}}</p>
 			<div class="sometext">
@@ -20,6 +21,11 @@
 		name: "GoodsItem",
 		props: {
 			goodsitem: Object
+		},
+		methods: {
+			goodsItemImgLoad() {
+				this.$bus.$emit('goodsItemImgCompleted')
+			}
 		}
 	}
 </script>

@@ -6,7 +6,8 @@ import './assets/iconfont/iconfont.css'
 
 import 'swiper/css/swiper.min.css'
 
-
+// 给$bus赋值为vue实例
+Vue.prototype.$bus = new Vue()
 Vue.config.productionTip = false
 
 new Vue({

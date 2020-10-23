@@ -76,6 +76,13 @@
 			this.getHomeGoods(1);
 			this.getHomeGoods(2);
 		},
+		mounted() {
+			// 监听goodsItem中的图片是否加载完成
+			this.$bus.$on('goodsItemImgCompleted', () => {
+				console.log("刷新scroll")
+				this.$refs.homeScroll.myScrollRefresh()
+			})
+		},
 		computed: {
 			showGoodsType() {
 				return this.goods[this.goodsType[this.currentType]].list
