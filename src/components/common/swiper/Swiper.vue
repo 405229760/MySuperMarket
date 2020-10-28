@@ -1,16 +1,14 @@
 <template>
 	<div class="swiper-container myswiper">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide" v-for="item in banners">
-				<img :src="item.image" @load='swiperImgLoad'>
-			</div>
+			<slot></slot>
 		</div>
 		<!-- 如果需要分页器 -->
 		<div class="swiper-pagination"></div>
 
 		<!-- 如果需要导航按钮 -->
-		<div class="swiper-button-prev"></div>
-		<div class="swiper-button-next"></div>
+		<!-- <div class="swiper-button-prev"></div>
+		<div class="swiper-button-next"></div> -->
 
 		<!-- 如果需要滚动条 -->
 		<!-- <div class="swiper-scrollbar"></div> -->
@@ -21,11 +19,6 @@
 	import Swiper from 'swiper';
 	export default {
 		name: 'Swiper',
-		data() {
-			return {
-				isload: false
-			}
-		},
 		props: {
 			banners: {
 				type: Array,
@@ -53,38 +46,15 @@
 					disableOnInteraction: false,
 				},
 				// 如果需要前进后退按钮
-				navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
+				// navigation: {
+				// 	nextEl: '.swiper-button-next',
+				// 	prevEl: '.swiper-button-prev',
+				// },
 				// 如果需要滚动条
 				// scrollbar: {
 				//   el: '.swiper-scrollbar',
 				// },
 			})
-		},
-		methods: {
-			swiperImgLoad() {
-				if (!this.isload) {
-					this.$emit('swiperImgCompleted')
-					this.isload = true;
-				}
-			}
 		}
 	}
 </script>
-
-<style lang="less" scoped>
-	.swiper-container {
-		width: 100%;
-
-		.swiper-slide {
-			width: 100%;
-
-			img {
-				width: 100%;
-				height: 100%;
-			}
-		}
-	}
-</style>

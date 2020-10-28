@@ -1,7 +1,7 @@
 <template>
-	<div class="goodsitem">
+	<div class="goodsitem" @click='goodsItemClick'>
 		<!-- 监听图片是否加载完成 -->
-		<img :src="goodsitem.show.img" @load='goodsItemImgLoad'>
+		<img :src="goodsitem.img" @load='goodsItemImgLoad'>
 		<div class="goods-info">
 			<p>{{goodsitem.title}}</p>
 			<div class="sometext">
@@ -24,9 +24,18 @@
 		},
 		methods: {
 			goodsItemImgLoad() {
-				this.$bus.$emit('goodsItemImgCompleted')
+				this.$emit('goodsItemImgCompleted')
+			},
+			goodsItemClick() {
+				// this.$router.push('/detail/' + this.goodsitem.iid)
+				this.$router.push(
+					'/detail/' + this.goodsitem.iid,
+					// query: {
+					// 	iid: this.goodsitem.iid
+					// }
+				)
 			}
-		}
+		},
 	}
 </script>
 

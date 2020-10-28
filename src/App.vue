@@ -1,7 +1,10 @@
 <template>
 	<div id="app">
-		<router-view />
-		<main-tab-bar />
+		<!-- keep-alive排除Detail -->
+		<keep-alive exclude="Detail">
+			<router-view :key='$route.fullPath' />
+		</keep-alive>
+		<main-tab-bar v-show="showTabBar" />
 	</div>
 </template>
 
@@ -9,9 +12,14 @@
 	import MainTabBar from '@/components/content/maintabbar/MainTabBar.vue'
 	export default {
 		name: 'App',
+		computed: {
+			showTabBar() {
+				return this.$route.path.indexOf('detail') == -1
+			}
+		},
 		components: {
 			MainTabBar,
-		}
+		},
 	}
 </script>
 

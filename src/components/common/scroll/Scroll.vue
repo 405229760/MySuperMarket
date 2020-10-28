@@ -13,7 +13,7 @@
 		props: {
 			probeType: {
 				type: Number,
-				default: 3
+				default: 0
 			},
 			pullUpLoad: {
 				type: Boolean,
@@ -64,7 +64,6 @@
 			// 刷新scroll
 			myScrollRefresh() {
 				this.myScroll && this.myScroll.refresh()
-				console.log('刷新scroll')
 			}
 		}
 	}

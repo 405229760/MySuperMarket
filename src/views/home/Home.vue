@@ -7,11 +7,12 @@
 		 v-show="isShowFakeTabControl" />
 		<scroll class="homeScroll" ref='homeScroll' @scrollPosition='scrollPosition' @scrollPullUp='scrollPullUp' :probe-type='3'
 		 :pull-up-load='true'>
-			<swiper :key="banners.length" :banners='banners' @swiperImgCompleted='imgCompleted' />
+			<home-swiper :banners='banners' @swiperImgCompleted='imgCompleted' />
 			<recommend-view :recommends="recommends" @recommendImgCompleted='imgCompleted' />
 			<feature-view class="feature" @featureImgCompleted='imgCompleted' />
 			<tab-control :tablist="['流行','新款','精选']" ref='hometabcontrol0' @tabControlClick='tabControlClick' />
-			<goods-list :goodslist="showGoodsType" />
+			<!-- <goods-list :goodslist="showGoodsType" /> -->
+			<home-goods-list :goodslist="showGoodsType" @goodsListCompleted='goodsListCompleted' />
 		</scroll>
 		<!-- 组件增加原生监听需要.native -->
 		<back-top @click.native='backTopClick' v-show="isShowBackTop" />
@@ -27,14 +28,15 @@
 		debounce
 	} from '@/tools/jsTools.js'
 	import NavBar from '@/components/common/navbar/NavBar.vue'
-	import Swiper from '@/components/common/swiper/Swiper.vue'
 	import TabControl from '@/components/common/tabcontrol/TabControl.vue'
 	import Scroll from '@/components/common/scroll/Scroll.vue'
 
 	import RecommendView from './childComps/RecommendView.vue'
 	import FeatureView from './childComps/FeatureView.vue'
+	import HomeSwiper from './childComps/HomeSwiper.vue'
+	import HomeGoodsList from './childComps/HomeGoodsList.vue'
 
-	import GoodsList from '@/components/content/goods/GoodsList.vue'
+	// import GoodsList from '@/components/content/goods/GoodsList.vue'
 	import BackTop from '@/components/content/backtop/BackTop.vue'
 
 	export default {
@@ -66,12 +68,12 @@
 		},
 		components: {
 			NavBar,
-			Swiper,
 			RecommendView,
 			FeatureView,
+			HomeSwiper,
 			TabControl,
 			Scroll,
-			GoodsList,
+			HomeGoodsList,
 			BackTop,
 
 		},
@@ -83,14 +85,14 @@
 			this.getHomeGoods(1);
 			this.getHomeGoods(2);
 		},
-		mounted() {
-			const refresh = debounce(this.$refs.homeScroll.myScrollRefresh, 100);
-			// 监听goodsItem中的图片是否加载完成
-			this.$bus.$on('goodsItemImgCompleted', () => {
-				// this.$refs.homeScroll && refresh();
-				refresh()
-			})
-		},
+		// mounted() {
+		// 	const refresh = debounce(this.$refs.homeScroll.myScrollRefresh, 100);
+		// 	// 监听goodsItem中的图片是否加载完成
+		// 	this.$bus.$on('goodsItemImgCompleted', () => {
+		// 		refresh()
+		// 	})
+		// 	// console.log(this.showGoodsType)
+		// },
 		computed: {
 			showGoodsType() {
 				return this.goods[this.goodsType[this.currentType]].list
@@ -100,6 +102,9 @@
 			/* 
 				其他
 			*/
+			goodsListCompleted() {
+				this.$refs.homeScroll.myScrollRefresh()
+			},
 			tabControlClick(index) {
 				this.currentType = index;
 				this.$refs.hometabcontrol0.setActive(index);
