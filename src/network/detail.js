@@ -26,6 +26,8 @@ export class Goods {
 		this.discountBgColor = itemInfo.discountBgColor;
 		this.columns = columns;
 		this.services = services;
+		// 加入购物车时使用
+		this.desc = itemInfo.desc;
 	}
 }
 

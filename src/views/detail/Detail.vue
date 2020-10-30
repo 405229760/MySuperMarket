@@ -1,7 +1,7 @@
 <template>
 	<div class="detail">
 		<detail-nav class="detailNav" @detailNavClick='navClick' ref='detailNav' />
-		<scroll class="detailScroll" ref="detailScroll" :probeType='3' @scrollPosition='scrollPosition'>
+		<scroll class="detailScroll" ref="scroll" :probeType='3' @scrollPosition='scrollPosition'>
 			<detail-swiper :banners='banners' @detailSwiperImgCompleted='imgCompleted' />
 			<detail-goods-info :goods='goods' />
 			<detail-sells-info :shop='shop' />
@@ -10,6 +10,8 @@
 			<detail-comment-info :goodsComment='goodsComment' ref='detailComment' />
 			<detail-goods-list :goodslist='goodsRecommendList' ref='detailGoodsList' />
 		</scroll>
+		<detail-bottom-bar class="detail-bottom-bar" @cartClick='addCartClick' />
+		<back-top @click.native='backTopClick' v-show="isShowBackTop" />
 	</div>
 </template>
 
@@ -25,6 +27,9 @@
 	import {
 		debounce
 	} from '@/tools/jsTools.js'
+	import {
+		backTopMixin
+	} from '@/tools/mixin.js'
 
 	import DetailSwiper from './childComps/DetailSwiper.vue'
 	import DetailNav from './childComps/DetailNav.vue'
@@ -34,6 +39,7 @@
 	import DetailParamInfo from './childComps/DetailParamInfo.vue'
 	import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
 	import DetailGoodsList from './childComps/DetailGoodsList.vue'
+	import DetailBottomBar from './childComps/DetailBottomBar.vue'
 
 	import Scroll from '@/components/common/scroll/Scroll.vue'
 
@@ -56,16 +62,18 @@
 				navCurrentIndex: 0,
 			}
 		},
+		mixins: [backTopMixin],
 		components: {
 			DetailNav,
 			DetailSwiper,
 			DetailGoodsInfo,
 			DetailSellsInfo,
-			Scroll,
 			DetailShowImgInfo,
 			DetailParamInfo,
 			DetailCommentInfo,
 			DetailGoodsList,
+			DetailBottomBar,
+			Scroll,
 		},
 		created() {
 			// 拿到传递过来的iid
@@ -82,16 +90,7 @@
 				this.navScrollArray.push(this.$refs.detailParam.$el.offsetTop)
 				this.navScrollArray.push(this.$refs.detailComment.$el.offsetTop)
 				this.navScrollArray.push(this.$refs.detailGoodsList.$el.offsetTop)
-				console.log('获取Detail中nav滚动距离', this.navScrollArray)
 			}, 100);
-		},
-		mounted() {
-			// const refresh = debounce(this.$refs.detailScroll.myScrollRefresh, 100);
-			// // 监听goodsItem中的图片是否加载完成
-			// this.$bus.$on('goodsItemImgCompleted', () => {
-			// 	// console.log("detail bus")
-			// 	refresh()
-			// })
 		},
 		methods: {
 			getGoodsData() {
@@ -111,31 +110,33 @@
 					// 获取评论信息
 					this.goodsComment = new GoodsComment(data.rate)
 				}).catch(err => {
-					console.log('服务器没有物品数据', err)
+					console.log('服务器没有数据，返回原先页面', err)
 					this.$router.back()
 				})
 			},
 			getRecommendData() {
 				getRecommend().then(res => {
 					this.goodsRecommendList = res.data.data.list;
-					console.log(this.goodsRecommendList)
 				}).catch(err => {
-					console.log('服务器没有推荐数据', err)
+					console.log('服务器没有数据，返回原先页面', err)
 					this.$router.back()
 				})
 			},
 			imgCompleted() {
-				this.$refs.detailScroll.myScrollRefresh()
+				this.$refs.scroll.myScrollRefresh()
 				this.getNavScroll()
 			},
 			navClick(index) {
 				this.isScollListener = false
-				this.$refs.detailScroll.myScrollTo(0, -this.navScrollArray[index], 500)
+				this.$refs.scroll.myScrollTo(0, -this.navScrollArray[index], 500)
 				setTimeout(() => {
 					this.isScollListener = true
 				}, 500)
 			},
 			scrollPosition(position) {
+				// 是否展示backTop
+				this.showBackTop(position);
+
 				let index = 0
 				for (let i = this.navScrollArray.length - 1; i > 0; i--) {
 					if (-position.y >= this.navScrollArray[i]) {
@@ -147,6 +148,17 @@
 					this.navCurrentIndex = index
 					this.$refs.detailNav.changeCurrentIndex(this.navCurrentIndex)
 				}
+			},
+			addCartClick() {
+				let product = {}
+				product.iid = this.iid
+				product.title = this.goods.title
+				product.desc = this.goods.desc
+				product.price = this.goods.nowPrice
+				product.img = this.banners[0]
+				product.num = 1
+				product.isChecked = true
+				this.$store.dispatch('addToCart', product)
 			}
 		}
 	}
@@ -168,5 +180,12 @@
 		right: 0;
 		top: 44px;
 		bottom: 50px;
+	}
+
+	.detail-bottom-bar {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
 	}
 </style>
