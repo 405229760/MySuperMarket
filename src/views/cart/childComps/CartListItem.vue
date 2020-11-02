@@ -1,10 +1,10 @@
 <template>
-	<div class="cart-list-item" :style="'background:' + setListBg" @click="itemClick">
-		<div class="item-left">
+	<div class="cart-list-item" :style="'background:' + setListBg">
+		<div class="item-left" @click="checkClick">
 			<span class="iconfont pick-icon" :class="setIconClass"></span>
 			<img :src="goodsInfo.img" @load='imgCompleted'>
 		</div>
-		<div class="item-right">
+		<div class="item-right" @click="detailClick">
 			<p class="item-title">{{goodsInfo.title}}</p>
 			<p class="item-desc">{{goodsInfo.desc}}</p>
 			<div class="item-text">
@@ -28,7 +28,7 @@
 		},
 		computed: {
 			setListBg() {
-				return this.goodsInfo.isChecked ? 'lightgray' : 'white'
+				return this.goodsInfo.isChecked ? '#FFFFF0' : 'white'
 			},
 			setIconClass() {
 				return this.goodsInfo.isChecked ? 'icon-check1 checked' : 'icon-weixuanzhong'
@@ -38,8 +38,13 @@
 			imgCompleted() {
 				this.$emit('imgCompleted')
 			},
-			itemClick() {
+			checkClick() {
 				this.$store.commit('cart_check_change', this.goodsInfo)
+			},
+			detailClick() {
+				this.$router.push(
+					'/detail/' + this.goodsInfo.iid,
+				)
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 <template>
 	<div class="goodsitem" @click='goodsItemClick'>
 		<!-- 监听图片是否加载完成 -->
+		<!-- <img :src="goodsitem.img" @load='goodsItemImgLoad'> -->
 		<img :src="goodsitem.img" @load='goodsItemImgLoad'>
 		<div class="goods-info">
 			<p>{{goodsitem.title}}</p>

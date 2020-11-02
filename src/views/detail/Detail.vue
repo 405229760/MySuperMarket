@@ -158,7 +158,9 @@
 				product.img = this.banners[0]
 				product.num = 1
 				product.isChecked = true
-				this.$store.dispatch('addToCart', product)
+				this.$store.dispatch('addToCart', product).then(res => {
+					this.$toast.show(res, 2000)
+				})
 			}
 		}
 	}

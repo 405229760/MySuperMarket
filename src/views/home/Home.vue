@@ -24,7 +24,7 @@
 		getHomeBannersData,
 		getHomeGoodsData
 	} from '@/network/home'
-	
+
 	import NavBar from '@/components/common/navbar/NavBar.vue'
 	import TabControl from '@/components/common/tabcontrol/TabControl.vue'
 	import Scroll from '@/components/common/scroll/Scroll.vue'

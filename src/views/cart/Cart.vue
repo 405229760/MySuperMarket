@@ -1,11 +1,14 @@
 <template>
 	<div id="cart">
+		<!-- 顶部 -->
 		<nav-bar class="nav-bar">
 			<div slot="center">购 物 车 ({{cartList.length}})</div>
 		</nav-bar>
+		<!-- 商品列表 -->
 		<scroll class="cartScroll" ref='cartScroll'>
 			<cart-list @imgCompleted='imgCompleted' :cartList='cartList' />
 		</scroll>
+		<!-- 底部 -->
 		<cart-bottom-bar />
 	</div>
 </template>
@@ -34,7 +37,9 @@
 			this.refreshScroll = debounce(() => {
 				this.$refs.cartScroll.myScrollRefresh()
 			}, 100)
-
+		},
+		activated() {
+			this.refreshScroll()
 			// 存储vuex中的购物车数据
 			this.cartList = this.$store.state.cartList
 		},
@@ -62,6 +67,11 @@
 			background-color: var(--color-tint);
 			color: white;
 			font-weight: bold;
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: 10;
 		}
 
 		.cartScroll {

@@ -12,5 +12,11 @@ export default {
 	},
 	cart_check_change(state, payload) {
 		payload.isChecked = !payload.isChecked
+	},
+	cart_check_false(state, payload) {
+		payload.isChecked = false
+	},
+	cart_check_true(state, payload) {
+		payload.isChecked = true
 	}
 }

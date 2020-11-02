@@ -63,7 +63,8 @@
 			},
 			// 刷新scroll
 			myScrollRefresh() {
-				this.myScroll && this.myScroll.refresh()
+				// this.myScroll && this.myScroll.refresh()
+				this.myScroll.refresh()
 			}
 		}
 	}
