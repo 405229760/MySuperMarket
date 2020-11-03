@@ -1,10 +1,13 @@
 <template>
 	<div class="home-goodslist">
-		<goods-item v-for="item in newGoods" :goodsitem='item' @goodsItemImgCompleted="goodsItemImgCompleted" />
+		<goods-item v-for="(item,index) in newGoods" :goodsitem='item' @goodsItemImgCompleted="goodsItemImgCompleted" :key='goodsType + index' />
 	</div>
 </template>
 
 <script>
+	import {
+		debounce
+	} from '@/tools/jsTools.js'
 	import GoodsItem from '@/components/content/goods/GoodsItem.vue'
 	export default {
 		name: "HomeGoodsList",
@@ -13,7 +16,7 @@
 		},
 		data() {
 			return {
-				count: 0
+				imgCompleted: null
 			}
 		},
 		props: {
@@ -22,7 +25,16 @@
 				default () {
 					return []
 				}
+			},
+			goodsType: {
+				type: String,
+				default: ''
 			}
+		},
+		created() {
+			this.imgCompleted = debounce(() => {
+				this.$emit('goodsListCompleted')
+			}, 100)
 		},
 		computed: {
 			newGoods() {
@@ -40,8 +52,7 @@
 		},
 		methods: {
 			goodsItemImgCompleted() {
-				if (++this.count == this.goodslist.length)
-					this.$emit('goodsListCompleted')
+				this.imgCompleted()
 			}
 		}
 	}

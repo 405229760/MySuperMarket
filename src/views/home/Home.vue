@@ -1,7 +1,7 @@
 <template>
 	<div id="home">
 		<nav-bar class="home-nav">
-			<div slot='center'>购物街</div>
+			<div slot='center'>购 物 街</div>
 		</nav-bar>
 		<tab-control :tablist="['流行','新款','精选']" class="home-tab-control" ref='hometabcontrol1' @tabControlClick='tabControlClick'
 		 v-show="isShowFakeTabControl" />
@@ -12,7 +12,7 @@
 			<feature-view class="feature" @featureImgCompleted='imgCompleted' />
 			<tab-control :tablist="['流行','新款','精选']" ref='hometabcontrol0' @tabControlClick='tabControlClick' />
 			<!-- <goods-list :goodslist="showGoodsType" /> -->
-			<home-goods-list :goodslist="showGoodsType" @goodsListCompleted='goodsListCompleted' />
+			<home-goods-list :goodslist="showGoodsType" :goodsType='goodsType[currentType]' @goodsListCompleted='goodsListCompleted' />
 		</scroll>
 		<!-- 组件增加原生监听需要.native -->
 		<back-top @click.native='backTopClick' v-show="isShowBackTop" />
@@ -96,6 +96,7 @@
 				this.$refs.scroll.myScrollRefresh()
 			},
 			tabControlClick(index) {
+				console.log(index)
 				this.currentType = index;
 				this.$refs.hometabcontrol0.setActive(index);
 				this.$refs.hometabcontrol1.setActive(index);
@@ -110,7 +111,6 @@
 				this.isShowFakeTabControl = (-positon.y) >= this.tabControlOffsetTop
 			},
 			scrollPullUp() {
-				console.log('上拉加载更多')
 				this.getHomeGoods(this.currentType)
 				this.$refs.scroll.myScrollFinishPullUp()
 			},
@@ -153,6 +153,7 @@
 			right: 0;
 			top: 0;
 			z-index: 10;
+			font-weight: bold;
 		}
 
 		.home-tab-control {

@@ -1,10 +1,13 @@
 <template>
 	<div class="detail-goodslist">
-		<goods-item v-for="item in newGoods" :goodsitem='item' @goodsItemImgCompleted="goodsItemImgCompleted" />
+		<goods-item v-for="(item,index) in newGoods" :goodsitem='item' @goodsItemImgCompleted="goodsItemImgCompleted" :key='index' />
 	</div>
 </template>
 
 <script>
+	import {
+		debounce
+	} from '@/tools/jsTools.js'
 	import GoodsItem from '@/components/content/goods/GoodsItem.vue'
 	export default {
 		name: "DetailGoodsList",
@@ -24,6 +27,11 @@
 				}
 			}
 		},
+		created() {
+			this.imgCompleted = debounce(() => {
+				this.$emit('goodsListCompleted')
+			}, 100)
+		},
 		computed: {
 			newGoods() {
 				let goods = this.goodslist.map(x => {
@@ -41,8 +49,7 @@
 		},
 		methods: {
 			goodsItemImgCompleted() {
-				if (++this.count == this.goodslist.length)
-					this.$emit('imgCompleted')
+				this.imgCompleted()
 			}
 		}
 	}

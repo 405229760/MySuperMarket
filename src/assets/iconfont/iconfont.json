@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "6237077",
+      "name": "右",
+      "font_class": "tubiaozhizuo-",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "1221419",
+      "name": "手机",
+      "font_class": "phone",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
       "icon_id": "595841",
       "name": "未选中",
       "font_class": "weixuanzhong",
