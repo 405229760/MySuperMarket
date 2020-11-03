@@ -4,12 +4,18 @@
 			<span class="iconfont pick-icon" :class="setIconClass"></span>
 			<img :src="goodsInfo.img" @load='imgCompleted'>
 		</div>
-		<div class="item-right" @click="detailClick">
-			<p class="item-title">{{goodsInfo.title}}</p>
-			<p class="item-desc">{{goodsInfo.desc}}</p>
+		<div class="item-right">
+			<div @click="detailClick">
+				<p class="item-title">{{goodsInfo.title}}</p>
+				<p class="item-desc">{{goodsInfo.desc}}</p>
+			</div>
 			<div class="item-text">
-				<span class="item-text-price">￥{{goodsInfo.price}}</span>
-				<span class="item-text-num">x{{goodsInfo.num}}</span>
+				<div class="item-text-price">￥{{goodsInfo.price}}</div>
+				<div class="item-text-num">
+					<div class="iconfont icon-jjian- item-text-num-sub" @click="subClick"></div>
+					<div class="item-text-num-num">{{goodsInfo.num}}</div>
+					<div class="iconfont icon-jjia- item-text-num-add" @click="addClick"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -45,6 +51,14 @@
 				this.$router.push(
 					'/detail/' + this.goodsInfo.iid,
 				)
+			},
+			subClick() {
+				if (this.goodsInfo.num > 1)
+					this.$store.commit('cart_sub_num', this.goodsInfo)
+			},
+			addClick() {
+				if (this.goodsInfo.num < 999)
+					this.$store.commit('cart_add_num', this.goodsInfo)
 			}
 		}
 	}
@@ -88,28 +102,31 @@
 			padding: 0 10px;
 			width: calc(100% - 140px);
 
-			.item-title {
-				width: 100%;
-				// 不换行
-				white-space: nowrap;
-				// 溢出显示省略号
-				overflow: hidden;
-				text-overflow: ellipsis;
-				font-weight: bold;
-				margin-top: 5px;
-				margin-bottom: 40px;
-				font-size: 20px;
+			div {
+				.item-title {
+					width: 100%;
+					// 不换行
+					white-space: nowrap;
+					// 溢出显示省略号
+					overflow: hidden;
+					text-overflow: ellipsis;
+					font-weight: bold;
+					margin-top: 5px;
+					margin-bottom: 40px;
+					font-size: 20px;
+				}
+
+				.item-desc {
+					width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					margin-bottom: 40px;
+					color: gray;
+					font-size: 16px;
+				}
 			}
 
-			.item-desc {
-				width: 100%;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				margin-bottom: 40px;
-				color: gray;
-				font-size: 16px;
-			}
 
 			.item-text {
 				display: flex;
@@ -124,6 +141,25 @@
 				.item-text-num {
 					font-weight: bold;
 					font-size: 20px;
+					width: 100px;
+					display: flex;
+					text-align: center;
+					line-height: 30px;
+
+					.item-text-num-num {
+						align-self: center;
+						width: 50px;
+					}
+
+					.item-text-num-sub {
+						width: 30px;
+						color: black;
+					}
+
+					.item-text-num-add {
+						width: 30px;
+						color: black;
+					}
 				}
 			}
 

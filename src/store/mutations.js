@@ -7,6 +7,9 @@ export default {
 	cart_add_num(state, payload) {
 		payload.num++
 	},
+	cart_sub_num(state, payload) {
+		payload.num--
+	},
 	cart_add_new(state, payload) {
 		state.cartList.push(payload)
 	},
